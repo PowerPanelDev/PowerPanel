@@ -37,6 +37,9 @@ function Delete(url: string, params: {}, onSuccess: (res: any) => void) {
 const auth = {
     fetch(onSuccess: (res: any) => void) {
         Get('/api/public/auth', {}, onSuccess);
+    },
+    login(name: string, password: string, onSuccess: (res: any) => void) {
+        Post('/api/public/auth/login', {name, password}, onSuccess);
     }
 }
 

@@ -2,11 +2,31 @@
 import {ArrowForwardOutlined} from "@vicons/material";
 import {ref} from "vue";
 import AllowSubmit from "@/components/AllowSubmit.vue";
+import {useAuthData} from "@/stores/AuthStore";
+import {auth} from "@/class/Client";
+import {useRouter} from "vue-router";
+import {useMessage} from "naive-ui";
 
+const AuthData = useAuthData();
+const router = useRouter();
+const message = useMessage();
 const input = ref({
     name: '',
     pass: ''
 });
+
+const actions = {
+    login() {
+        auth.login(input.value.name, input.value.pass, () => {
+            AuthData.load(() => {
+                if (AuthData.status) {
+                    router.isReady().then(() => router.push({name: 'instance'}));
+                    message.success('登录成功，欢迎回来');
+                }
+            });
+        });
+    }
+};
 </script>
 
 <template>
@@ -23,11 +43,12 @@ const input = ref({
                     <div class="font-bold text-3xl text-gray-700 mt-1">PowerPanel</div>
                 </div>
                 <div class="login-form">
-                    <n-form @submit.prevent>
+                    <n-form @submit.prevent="actions.login()">
                         <n-input v-model:value="input.name" placeholder="输入用户名" class="mt-10" size="large"/>
-                        <n-input v-model:value="input.name" placeholder="输入密码" class="mt-4" size="large"/>
+                        <n-input v-model:value="input.pass" type="password" placeholder="输入密码" class="mt-4"
+                                 size="large"/>
 
-                        <n-button block type="primary" class="button" size="large">
+                        <n-button block type="primary" class="button" size="large" @click="actions.login()">
                             登录
                             <n-icon class="ml-0.5" :size="16">
                                 <ArrowForwardOutlined/>
