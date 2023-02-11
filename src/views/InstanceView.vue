@@ -24,8 +24,8 @@ const layoutName = computed(() => {
 const router = useRouter();
 
 useAuthData().listen(() => {
-    ins.fetch(insId, res => {
-        detail.init(res.data.attributes)
+    ins.fetch(insId).then(res => {
+        detail.init(res.data.attributes);
     });
 });
 

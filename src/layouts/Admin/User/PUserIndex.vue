@@ -9,7 +9,7 @@ import PUserList from "@/components/Admin/App/PUserList.vue";
 import PUserEditor from "@/components/Admin/App/PUserEditor.vue";
 
 const data = ref([]);
-const load = () => admin.user.list((res) => {
+const load = () => admin.user.list().then(res => {
     data.value = res.data.data;
 });
 const route = useRoute();

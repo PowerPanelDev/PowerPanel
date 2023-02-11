@@ -28,7 +28,7 @@ const AuthData = useAuthData();
 const data = ref<IData>();
 
 AuthData.listen(() => {
-    admin.fetch((res) => {
+    admin.fetch().then(res => {
         data.value = res.data.attributes;
     });
 });

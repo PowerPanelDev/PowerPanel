@@ -25,29 +25,29 @@ const actions = {
         actions.load();
     },
     load() {
-        admin.app.list(res => {
+        admin.app.list().then(res => {
             apps.value = res.data.data.map((v: { id: number, name: string }) => {
                 return {label: v.id + '-' + v.name, value: v.id};
             });
         });
         if (create.value) return;
-        admin.app.version.detail(props.id, res => {
+        admin.app.version.detail(props.id).then(res => {
             data.value = res.data.attributes;
-        })
+        });
     },
     confirm() {
         if (create.value) {
-            admin.app.version.create(data.value, () => {
+            admin.app.version.create(data.value).then(() => {
                 actions.close('版本创建成功。', true);
             });
         } else {
-            admin.app.version.update(props.id, data.value, () => {
+            admin.app.version.update(props.id, data.value).then(() => {
                 actions.close('版本修改成功。', true);
             });
         }
     },
     delete() {
-        admin.app.version.delete(props.id, () => {
+        admin.app.version.delete(props.id).then(() => {
             actions.close('版本删除成功。', true);
         });
     },

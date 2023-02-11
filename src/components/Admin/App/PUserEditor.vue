@@ -25,23 +25,23 @@ const actions = {
     },
     load() {
         if (create.value) return;
-        admin.user.detail(props.id, res => {
+        admin.user.detail(props.id).then(res => {
             data.value = res.data.attributes;
-        })
+        });
     },
     confirm() {
         if (create.value) {
-            admin.user.create(data.value, () => {
+            admin.user.create(data.value).then(() => {
                 actions.close('用户创建成功。', true);
             });
         } else {
-            admin.user.update(props.id, data.value, () => {
+            admin.user.update(props.id, data.value).then(() => {
                 actions.close('用户修改成功。', true);
             });
         }
     },
     delete() {
-        admin.user.delete(props.id, () => {
+        admin.user.delete(props.id).then(() => {
             actions.close('用户删除成功。', true);
         });
     },

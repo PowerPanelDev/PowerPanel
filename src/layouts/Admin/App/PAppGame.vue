@@ -9,7 +9,7 @@ import {useAuthData} from "@/stores/AuthStore";
 import {admin} from "@/class/Client";
 
 const data = ref([]);
-const load = () => admin.app.game.list((res) => {
+const load = () => admin.app.game.list().then(res => {
     data.value = res.data.data;
 });
 const route = useRoute();

@@ -37,7 +37,7 @@ const actions = {
         actions.load();
     },
     load() {
-        admin.app.game.list(res => {
+        admin.app.game.list().then(res => {
             games.value = res.data.data.map((v: { id: number, name: string }) => {
                 return {label: v.id + '-' + v.name, value: v.id};
             });
@@ -46,25 +46,25 @@ const actions = {
             dataPath.value = DataPath.Parse(data.value.data_path);
             return;
         }
-        admin.app.detail(props.id, res => {
+        admin.app.detail(props.id).then(res => {
             data.value = res.data.attributes;
             dataPath.value = DataPath.Parse(data.value.data_path);
-        })
+        });
     },
     confirm() {
         data.value.data_path = DataPath.Build(dataPath.value);
         if (create.value) {
-            admin.app.create(data.value, () => {
+            admin.app.create(data.value).then(() => {
                 actions.close('镜像创建成功。', true);
             });
         } else {
-            admin.app.update(props.id, data.value, () => {
+            admin.app.update(props.id, data.value).then(() => {
                 actions.close('镜像修改成功。', true);
             });
         }
     },
     delete() {
-        admin.app.delete(props.id, () => {
+        admin.app.delete(props.id).then(() => {
             actions.close('镜像删除成功。', true);
         });
     },

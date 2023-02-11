@@ -129,7 +129,7 @@ onMounted(() => detail.listen(() => {
 const actions = {
     load(target: string) {
         loading.value = true;
-        ins.file.list(insId, Base64.encode(target), (res) => {
+        ins.file.list(insId, Base64.encode(target)).then(res => {
             loading.value = false;
             checked.value = [];
             path.value = target;
@@ -155,24 +155,24 @@ const actions = {
             });
             const wait = message.loading('压缩操作已开始，请耐心等待', {duration: 0});
             ins.file.compress(
-                insId, Base64.encode(path.value), targets, () => {
-                    actions.reload();
-                    if (wait) wait.destroy();
-                    message.success('压缩操作成功');
-                }
-            );
+                insId, Base64.encode(path.value), targets
+            ).then(() => {
+                actions.reload();
+                if (wait) wait.destroy();
+                message.success('压缩操作成功');
+            });
         },
         delete: () => modals.value.delete = true,
         permission: () => modals.value.permission = true,
         upload: () => modals.value.upload = true,
         download() {
-            ins.file.download(insId, Base64.encode(path.value + Base64.decode(selected.value[0].base64!!)), (res) => {
+            ins.file.download(insId, Base64.encode(path.value + Base64.decode(selected.value[0].base64!!))).then(res => {
                 window.location.href = res.data.attributes.url;
             });
         },
         decompress() {
             const wait = message.loading('解压缩操作已开始，请耐心等待', {duration: 0});
-            ins.file.decompress(insId, Base64.encode(path.value + Base64.decode(selected.value[0].base64!!)), () => {
+            ins.file.decompress(insId, Base64.encode(path.value + Base64.decode(selected.value[0].base64!!))).then(() => {
                 actions.reload();
                 if (wait) wait.destroy();
                 message.success('解压缩操作成功');

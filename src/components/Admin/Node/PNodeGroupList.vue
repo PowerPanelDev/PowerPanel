@@ -44,7 +44,7 @@ const columns: DataTableColumns<Row> = [{
 const data = ref<Row[]>([]);
 
 useAuthData().listen(() => {
-    admin.node.group.list((res) => {
+    admin.node.group.list().then(res => {
         data.value = res.data.data;
     });
 });

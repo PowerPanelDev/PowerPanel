@@ -26,7 +26,7 @@ onMounted(() => {
                 bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
                 exec: () => onConfirm(false)
             });
-            ins.file.read(props.insId, Base64.encode(props.path + props.clicked), (res) => {
+            ins.file.read(props.insId, Base64.encode(props.path + props.clicked)).then(res => {
                 editor.setValue(Base64.decode(res.data.attributes.content), 0);
                 editor.clearSelection();
             });
@@ -35,7 +35,11 @@ onMounted(() => {
 });
 
 function onConfirm(_close = true) {
-    ins.file.save(props.insId, Base64.encode(Base64.decode(props.path) + props.clicked), Base64.encode(editor.getValue()), () => {
+    ins.file.save(
+        props.insId,
+        Base64.encode(Base64.decode(props.path) + props.clicked),
+        Base64.encode(editor.getValue())
+    ).then(() => {
         message.success('保存成功');
         if (_close) close();
     });

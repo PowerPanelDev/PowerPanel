@@ -46,8 +46,8 @@ const statusChart = {
 };
 
 AuthData.listen(() => {
-    ins.list(res => {
-        list.value = res.data.data
+    ins.list().then(res => {
+        list.value = res.data.data;
     });
 });
 </script>

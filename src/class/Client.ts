@@ -1,188 +1,207 @@
 import {useAuthData} from '@/stores/AuthStore';
 import axios from 'axios';
 
-function Get(url: string, params: {}, onSuccess: (res: any) => void) {
+function Get(url: string, params: {}) {
     const AuthStore = useAuthData();
-    axios.get(url, {params: {...params, ...(AuthStore.csrf ? {csrf: AuthStore.csrf} : {})}}).then(onSuccess).catch((res) => {
-        console.log(res);
-        const data = res.response.data;
+    return axios.get(url, {
+        params: {
+            ...params,
+            ...(AuthStore.csrf ? {csrf: AuthStore.csrf} : {})
+        }
+    }).then(res => res).catch(reason => {
+        const data = reason.response.data;
         (window as any).message.error(data.code + ' 错误：' + data.msg);
+        throw reason;
     });
 }
 
-function Post(url: string, params: {}, onSuccess: (res: any) => void) {
+function Post(url: string, params: {}) {
     const AuthStore = useAuthData();
-    axios.post(url, {...params, ...(AuthStore.csrf ? {csrf: AuthStore.csrf} : {})}).then(onSuccess).catch((res) => {
-        const data = res.response.data;
+    return axios.post(url, {
+        ...params,
+        ...(AuthStore.csrf ? {csrf: AuthStore.csrf} : {})
+    }).catch(reason => {
+        const data = reason.response.data;
         (window as any).message.error(data.code + ' 错误：' + data.msg);
+        throw reason;
     });
 }
 
-function Put(url: string, params: {}, onSuccess: (res: any) => void) {
+function Put(url: string, params: {}) {
     const AuthStore = useAuthData();
-    axios.put(url, {...params, ...(AuthStore.csrf ? {csrf: AuthStore.csrf} : {})}).then(onSuccess).catch(function (res) {
-        const data = res.response.data;
+    return axios.put(url, {
+        ...params,
+        ...(AuthStore.csrf ? {csrf: AuthStore.csrf} : {})
+    }).catch(reason => {
+        const data = reason.response.data;
         (window as any).message.error(data.code + ' 错误：' + data.msg);
+        throw reason;
     });
 }
 
-function Delete(url: string, params: {}, onSuccess: (res: any) => void) {
+function Delete(url: string, params: {}) {
     const AuthStore = useAuthData();
-    axios.delete(url, {params: {...params, ...(AuthStore.csrf ? {csrf: AuthStore.csrf} : {})}}).then(onSuccess).catch(function (res) {
-        const data = res.response.data;
+    return axios.delete(url, {
+        params: {
+            ...params,
+            ...(AuthStore.csrf ? {csrf: AuthStore.csrf} : {})
+        }
+    }).catch(reason => {
+        const data = reason.response.data;
         (window as any).message.error(data.code + ' 错误：' + data.msg);
+        throw reason;
     });
 }
 
 const auth = {
-    fetch(onSuccess: (res: any) => void) {
-        Get('/api/public/auth', {}, onSuccess);
+    fetch() {
+        return Get('/api/public/auth', {});
     },
-    login(name: string, password: string, onSuccess: (res: any) => void) {
-        Post('/api/public/auth/login', {name, password}, onSuccess);
+    login(name: string, password: string) {
+        return Post('/api/public/auth/login', {name, password});
     }
 }
 
 const ins = {
-    list(onSuccess: (res: any) => void) {
-        Get('/api/public/ins', {}, onSuccess);
+    list() {
+        return Get('/api/public/ins', {});
     },
-    fetch(insId: number, onSuccess: (res: any) => void) {
-        Get('/api/public/ins/' + insId, {}, onSuccess);
+    fetch(insId: number) {
+        return Get('/api/public/ins/' + insId, {});
     },
-    getConsole(insId: number, onSuccess: (res: any) => void) {
-        Get('/api/public/ins/' + insId + '/console', {}, onSuccess);
+    getConsole(insId: number) {
+        return Get('/api/public/ins/' + insId + '/console', {});
     },
-    rename(insId: number, name: string, onSuccess: (res: any) => void) {
-        Put('/api/public/ins/' + insId + '/rename', {name}, onSuccess);
+    rename(insId: number, name: string) {
+        return Put('/api/public/ins/' + insId + '/rename', {name});
     },
     file: {
-        list(insId: number, path: string, onSuccess: (res: any) => void) {
-            Get('/api/public/ins/' + insId + '/files', {path}, onSuccess);
+        list(insId: number, path: string) {
+            return Get('/api/public/ins/' + insId + '/files', {path});
         },
-        rename(insId: number, from: string, to: string, onSuccess: (res: any) => void) {
-            Post('/api/public/ins/' + insId + '/files/rename', {from, to}, onSuccess);
+        rename(insId: number, from: string, to: string) {
+            return Post('/api/public/ins/' + insId + '/files/rename', {from, to});
         },
-        compress(insId: number, base: string, targets: string[], onSuccess: (res: any) => void) {
-            Post('/api/public/ins/' + insId + '/files/compress', {base, targets}, onSuccess);
+        compress(insId: number, base: string, targets: string[]) {
+            return Post('/api/public/ins/' + insId + '/files/compress', {base, targets});
         },
-        delete(insId: number, base: string, targets: string[], onSuccess: (res: any) => void) {
-            Post('/api/public/ins/' + insId + '/files/delete', {base, targets}, onSuccess);
+        delete(insId: number, base: string, targets: string[]) {
+            return Post('/api/public/ins/' + insId + '/files/delete', {base, targets});
         },
         permission: {
-            get(insId: number, path: string, onSuccess: (res: any) => void) {
-                Post('/api/public/ins/' + insId + '/files/permission', {path}, onSuccess);
+            get(insId: number, path: string) {
+                return Post('/api/public/ins/' + insId + '/files/permission', {path});
             },
-            set(insId: number, path: string, permission: number, onSuccess: (res: any) => void) {
-                Put('/api/public/ins/' + insId + '/files/permission', {path, permission}, onSuccess);
+            set(insId: number, path: string, permission: number) {
+                return Put('/api/public/ins/' + insId + '/files/permission', {path, permission});
             }
         },
-        download(insId: number, path: string, onSuccess: (res: any) => void) {
-            Post('/api/public/ins/' + insId + '/files/download', {path}, onSuccess);
+        download(insId: number, path: string) {
+            return Post('/api/public/ins/' + insId + '/files/download', {path});
         },
-        upload(insId: number, base: string, onSuccess: (res: any) => void) {
-            Post('/api/public/ins/' + insId + '/files/upload', {base}, onSuccess);
+        upload(insId: number, base: string) {
+            return Post('/api/public/ins/' + insId + '/files/upload', {base});
         },
-        decompress(insId: number, path: string, onSuccess: (res: any) => void) {
-            Post('/api/public/ins/' + insId + '/files/decompress', {path}, onSuccess);
+        decompress(insId: number, path: string) {
+            return Post('/api/public/ins/' + insId + '/files/decompress', {path});
         },
-        create(insId: number, base: string, type: 'file' | 'folder', name: string, onSuccess: (res: any) => void) {
-            Post('/api/public/ins/' + insId + '/files/create', {base, type, name}, onSuccess);
+        create(insId: number, base: string, type: 'file' | 'folder', name: string) {
+            return Post('/api/public/ins/' + insId + '/files/create', {base, type, name});
         },
-        read(insId: number, path: string, onSuccess: (res: any) => void) {
-            Post('/api/public/ins/' + insId + '/files/read', {path}, onSuccess);
+        read(insId: number, path: string) {
+            return Post('/api/public/ins/' + insId + '/files/read', {path});
         },
-        save(insId: number, path: string, content: string, onSuccess: (res: any) => void) {
-            Post('/api/public/ins/' + insId + '/files/save', {path, content}, onSuccess);
+        save(insId: number, path: string, content: string) {
+            return Post('/api/public/ins/' + insId + '/files/save', {path, content});
         }
     }
 }
 
 const admin = {
-    fetch(onSuccess: (res: any) => void) {
-        Get('/api/admin', {}, onSuccess);
+    fetch() {
+        return Get('/api/admin', {});
     },
     ins: {
-        list(onSuccess: (res: any) => void) {
-            Get('/api/admin/ins', {}, onSuccess);
+        list() {
+            return Get('/api/admin/ins', {});
         }
     },
     node: {
         group: {
-            list(onSuccess: (res: any) => void) {
-                Get('/api/admin/node/group', {}, onSuccess);
+            list() {
+                return Get('/api/admin/node/group', {});
             }
         },
-        list(onSuccess: (res: any) => void) {
-            Get('/api/admin/node', {}, onSuccess);
+        list() {
+            return Get('/api/admin/node', {});
         }
     },
     user: {
-        list(onSuccess: (res: any) => void) {
-            Get('/api/admin/user', {}, onSuccess);
+        list() {
+            return Get('/api/admin/user', {});
         },
-        create(data: any, onSuccess: (res: any) => void) {
-            Post('/api/admin/user', data, onSuccess);
+        create(data: any) {
+            return Post('/api/admin/user', data);
         },
-        detail(id: number, onSuccess: (res: any) => void) {
-            Get('/api/admin/user/' + id, {}, onSuccess);
+        detail(id: number) {
+            return Get('/api/admin/user/' + id, {});
         },
-        update(id: number, data: any, onSuccess: (res: any) => void) {
-            Put('/api/admin/user/' + id, data, onSuccess);
+        update(id: number, data: any) {
+            return Put('/api/admin/user/' + id, data);
         },
-        delete(id: number, onSuccess: (res: any) => void) {
-            Delete('/api/admin/user/' + id, {}, onSuccess);
+        delete(id: number) {
+            return Delete('/api/admin/user/' + id, {});
         }
     },
     app: {
         game: {
-            list(onSuccess: (res: any) => void) {
-                Get('/api/admin/app/game', {}, onSuccess);
+            list() {
+                return Get('/api/admin/app/game', {});
             },
-            create(data: any, onSuccess: (res: any) => void) {
-                Post('/api/admin/app/game', data, onSuccess);
+            create(data: any) {
+                return Post('/api/admin/app/game', data);
             },
-            detail(id: number, onSuccess: (res: any) => void) {
-                Get('/api/admin/app/game/' + id, {}, onSuccess);
+            detail(id: number) {
+                return Get('/api/admin/app/game/' + id, {});
             },
-            update(id: number, data: any, onSuccess: (res: any) => void) {
-                Put('/api/admin/app/game/' + id, data, onSuccess);
+            update(id: number, data: any) {
+                return Put('/api/admin/app/game/' + id, data);
             },
-            delete(id: number, onSuccess: (res: any) => void) {
-                Delete('/api/admin/app/game/' + id, {}, onSuccess);
+            delete(id: number) {
+                return Delete('/api/admin/app/game/' + id, {});
             }
         },
         version: {
-            list(onSuccess: (res: any) => void) {
-                Get('/api/admin/app/version', {}, onSuccess);
+            list() {
+                return Get('/api/admin/app/version', {});
             },
-            create(data: any, onSuccess: (res: any) => void) {
-                Post('/api/admin/app/version', data, onSuccess);
+            create(data: any) {
+                return Post('/api/admin/app/version', data);
             },
-            detail(id: number, onSuccess: (res: any) => void) {
-                Get('/api/admin/app/version/' + id, {}, onSuccess);
+            detail(id: number) {
+                return Get('/api/admin/app/version/' + id, {});
             },
-            update(id: number, data: any, onSuccess: (res: any) => void) {
-                Put('/api/admin/app/version/' + id, data, onSuccess);
+            update(id: number, data: any) {
+                return Put('/api/admin/app/version/' + id, data);
             },
-            delete(id: number, onSuccess: (res: any) => void) {
-                Delete('/api/admin/app/version/' + id, {}, onSuccess);
+            delete(id: number) {
+                return Delete('/api/admin/app/version/' + id, {});
             }
         },
-        list(onSuccess: (res: any) => void) {
-            Get('/api/admin/app', {}, onSuccess);
+        list() {
+            return Get('/api/admin/app', {});
         },
-        create(data: any, onSuccess: (res: any) => void) {
-            Post('/api/admin/app', data, onSuccess);
+        create(data: any) {
+            return Post('/api/admin/app', data);
         },
-        detail(id: number, onSuccess: (res: any) => void) {
-            Get('/api/admin/app/' + id, {}, onSuccess);
+        detail(id: number) {
+            return Get('/api/admin/app/' + id, {});
         },
-        update(id: number, data: any, onSuccess: (res: any) => void) {
-            Put('/api/admin/app/' + id, data, onSuccess);
+        update(id: number, data: any) {
+            return Put('/api/admin/app/' + id, data);
         },
-        delete(id: number, onSuccess: (res: any) => void) {
-            Delete('/api/admin/app/' + id, {}, onSuccess);
+        delete(id: number) {
+            return Delete('/api/admin/app/' + id, {});
         }
     }
 }

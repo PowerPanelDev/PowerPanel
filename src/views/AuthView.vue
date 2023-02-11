@@ -17,7 +17,7 @@ const input = ref({
 
 const actions = {
     login() {
-        auth.login(input.value.name, input.value.pass, () => {
+        auth.login(input.value.name, input.value.pass).then(() => {
             AuthData.load(() => {
                 if (AuthData.status) {
                     router.isReady().then(() => router.push({name: 'instance'}));

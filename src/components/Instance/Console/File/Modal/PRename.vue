@@ -18,12 +18,11 @@ function onConfirm() {
     ins.file.rename(
         props.insId,
         Base64.encode(props.path + Base64.decode(props.selected[0].base64)),
-        Base64.encode(props.path + input.value),
-        () => {
-            if (props.reload) props.reload();
-            message.success('重命名操作成功');
-        }
-    );
+        Base64.encode(props.path + input.value)
+    ).then(() => {
+        if (props.reload) props.reload();
+        message.success('重命名操作成功');
+    });
     close();
 }
 

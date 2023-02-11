@@ -18,7 +18,7 @@ export const useAuthData = defineStore('AuthStore', {
             });
         },
         load(callback: () => void) {
-            auth.fetch((res) => {
+            auth.fetch().then(res => {
                 this.$patch({loaded: true, status: res.data.status, ...res.data.attributes});
                 callback();
             });

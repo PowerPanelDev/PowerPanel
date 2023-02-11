@@ -19,7 +19,7 @@ function onConfirm() {
     props.selected.forEach((item: { base64: string }) => {
         targets.push(item.base64);
     });
-    ins.file.delete(props.insId, Base64.encode(props.path), targets, () => {
+    ins.file.delete(props.insId, Base64.encode(props.path), targets).then(() => {
         message.success('删除操作成功');
         props.reload();
     });

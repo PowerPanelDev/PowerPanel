@@ -9,7 +9,7 @@ import {useAuthData} from "@/stores/AuthStore";
 import PAppEditor from "@/components/Admin/App/PAppEditor.vue";
 
 const data = ref([]);
-const load = () => admin.app.list((res) => {
+const load = () => admin.app.list().then(res => {
     data.value = res.data.data;
 });
 const route = useRoute();
