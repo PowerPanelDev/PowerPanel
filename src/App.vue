@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import {onMounted} from 'vue';
 import {useAuthData} from './stores/AuthStore';
-import {auth} from './class/Client';
 import {useRouter} from 'vue-router';
 import colors from 'tailwindcss/colors';
 import type {GlobalThemeOverrides} from "naive-ui";
@@ -11,11 +10,10 @@ const AuthData = useAuthData();
 const router = useRouter();
 
 onMounted(() => {
-    auth.fetch((res) => {
-        AuthData.$patch({loaded: true, status: res.data.status, ...res.data.attributes});
+    AuthData.load(() => {
         if (!AuthData.status) {
             router.isReady().then(() => router.push('/auth'));
-            console.log('未登录 转跳');
+            (window as any).message.warning('身份信息已过期，请重新登录');
         }
     });
 });

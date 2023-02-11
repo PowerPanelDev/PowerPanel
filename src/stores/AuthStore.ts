@@ -1,4 +1,5 @@
 import {defineStore} from 'pinia'
+import {auth} from "@/class/Client";
 
 export const useAuthData = defineStore('AuthStore', {
     state: () => ({
@@ -16,5 +17,11 @@ export const useAuthData = defineStore('AuthStore', {
                 cancel();
             });
         },
+        load(callback: () => void) {
+            auth.fetch((res) => {
+                this.$patch({loaded: true, status: res.data.status, ...res.data.attributes});
+                callback();
+            });
+        }
     }
 })
