@@ -1,0 +1,14 @@
+{
+  "txt": "plain_text",
+  "log": "plain_text",
+  "properties": "properties",
+  "ini": "ini",
+  "yml": "yaml",
+  "xml": "xml",
+  "sh": "sh",
+  "js": "javascript",
+  "html": "html",
+  "php": "php",
+  "json": "json",
+  "md": "markdown"
+}

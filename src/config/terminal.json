@@ -1,0 +1,21 @@
+{
+  "theme": {
+    "background": "white",
+    "black": "#011627",
+    "blue": "#4876D6",
+    "brightBlack": "#7A8181",
+    "brightBlue": "#5CA7E4",
+    "brightCyan": "#00C990",
+    "brightGreen": "#49D0C5",
+    "brightRed": "#F76E6E",
+    "brightWhite": "#989FB1",
+    "brightYellow": "#DAC26B",
+    "cyan": "#08916A",
+    "foreground": "#403F53",
+    "green": "#2AA298",
+    "red": "#D3423E",
+    "white": "#7A8181",
+    "yellow": "#DAAA01"
+  },
+  "fontFamily": "Consolas, Microsoft YaHei, monospace"
+}

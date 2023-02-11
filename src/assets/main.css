@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    font-weight: 400;
+}
+
+.mdui-container {
+    box-sizing: border-box;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 8px;
+    padding-left: 8px;
+}
+
+.mdui-container {
+    width: 96%;
+    max-width: 1440px;
+}
+
+@media (min-width: 600px) {
+    .mdui-container {
+        width: 94%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .mdui-container {
+        width: 92%;
+    }
+}
+
+ul {
+    list-style: unset;
+    margin: 0;
+    padding: 0.4rem 1.2rem;
+}
+
+.n-data-table td,
+.n-data-table th {
+    white-space: nowrap;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.n-drawer-footer > * {
+    margin-left: 10px !important;
+}
