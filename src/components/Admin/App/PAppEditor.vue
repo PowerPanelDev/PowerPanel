@@ -6,6 +6,7 @@ import type {MentionOption} from 'naive-ui';
 import {DataPath} from "@/class/DataPath";
 import AllowSubmit from "@/components/AllowSubmit.vue";
 import PSelector from "@/components/PSelector.vue";
+import PSwitch from "@/components/PSwitch.vue";
 
 const props = defineProps(['id']);
 const emits = defineEmits(['update:id', 'reload']);
@@ -152,7 +153,7 @@ const tab = ref('general');
                 </n-form-item>
 
                 <n-form-item label="跳过安装" v-if="tab === 'install'">
-                    <n-switch v-model:value="data.skip_install"/>
+                    <PSwitch v-model="data.skip_install" element="switch"/>
                 </n-form-item>
 
                 <n-form-item label="安装镜像" v-if="tab === 'install'">

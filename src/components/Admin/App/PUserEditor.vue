@@ -3,6 +3,7 @@ import {computed, ref, watch} from "vue";
 import {admin} from "@/class/Client";
 import {useMessage} from "naive-ui";
 import AllowSubmit from "@/components/AllowSubmit.vue";
+import PSwitch from "@/components/PSwitch.vue";
 
 const props = defineProps(['id']);
 const emits = defineEmits(['update:id', 'reload']);
@@ -55,15 +56,6 @@ const width: number = window.innerWidth;
 const create = computed(() => props.id == 'create');
 
 watch(() => props.id, (v) => !v || actions.init());
-
-const isAdmin = computed({
-    get() {
-        return data.value.is_admin == 1;
-    },
-    set(v) {
-        data.value.is_admin = {true: 1, false: 0}[v.toString()]!;
-    }
-});
 </script>
 
 <template>
@@ -92,7 +84,7 @@ const isAdmin = computed({
                 </n-form-item>
 
                 <n-form-item label="类型">
-                    <n-checkbox v-model:checked="isAdmin">管理员账号</n-checkbox>
+                    <PSwitch v-model="data.is_admin">管理员账号</PSwitch>
                 </n-form-item>
 
                 <n-form-item label="更新时间" v-if="!create">
