@@ -146,6 +146,18 @@ const admin = {
         },
         list() {
             return Get('/api/admin/node', {});
+        },
+        create(data: any) {
+            return Post('/api/admin/node', data);
+        },
+        detail(id: number) {
+            return Get('/api/admin/node/' + id, {});
+        },
+        update(id: number, data: any) {
+            return Put('/api/admin/node/' + id, data);
+        },
+        delete(id: number) {
+            return Delete('/api/admin/node/' + id, {});
         }
     },
     user: {
