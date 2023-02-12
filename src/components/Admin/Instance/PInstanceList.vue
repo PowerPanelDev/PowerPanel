@@ -12,7 +12,7 @@ interface Row {
     relationship: {
         user: {
             id: number
-            nickname: string
+            name: string
         }
     }
     node: {
@@ -48,7 +48,7 @@ const columns: DataTableColumns<Row> = [{
                 name: 'admin.user.index',
                 params: {userId: row.relationship.user.id}
             }
-        }, () => row.relationship.user.nickname);
+        }, () => row.relationship.user.name);
     }
 }, {
     title: '节点', key: 'node', render(row: Row) {
