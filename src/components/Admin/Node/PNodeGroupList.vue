@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import {DataTableColumns, NTag, NTime} from "naive-ui";
-import {h, ref} from "vue";
-import {useAuthData} from "@/stores/AuthStore";
-import {admin} from "@/class/Client";
+import {h} from "vue";
 import PLink from "@/components/PLink.vue";
+
+defineProps(['data']);
 
 interface Row {
     id: number
@@ -41,13 +41,6 @@ const columns: DataTableColumns<Row> = [{
         }, () => '修改');
     }
 }];
-const data = ref<Row[]>([]);
-
-useAuthData().listen(() => {
-    admin.node.group.list().then(res => {
-        data.value = res.data.data;
-    });
-});
 </script>
 
 <template>

@@ -130,6 +130,18 @@ const admin = {
         group: {
             list() {
                 return Get('/api/admin/node/group', {});
+            },
+            create(data: any) {
+                return Post('/api/admin/node/group', data);
+            },
+            detail(id: number) {
+                return Get('/api/admin/node/group/' + id, {});
+            },
+            update(id: number, data: any) {
+                return Put('/api/admin/node/group/' + id, data);
+            },
+            delete(id: number) {
+                return Delete('/api/admin/node/group/' + id, {});
             }
         },
         list() {

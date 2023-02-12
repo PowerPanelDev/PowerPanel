@@ -52,13 +52,13 @@ const router = createRouter({
             }, ...[
                 // 此处为了直观使用了展开语法
                 {
-                    path: 'node/group/:groupId?',
-                    name: 'admin.node.group',
-                    component: () => import('@/layouts/Admin/Node/PNodeGroup.vue')
-                }, {
                     path: 'node/:nodeId?',
                     name: 'admin.node.index',
                     component: () => import('@/layouts/Admin/Node/PNodeIndex.vue')
+                }, {
+                    path: 'node/group/:groupId?',
+                    name: 'admin.node.group',
+                    component: () => import('@/layouts/Admin/Node/PNodeGroup.vue')
                 }
             ], ...[
                 {
