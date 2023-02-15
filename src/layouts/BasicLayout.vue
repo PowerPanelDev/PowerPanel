@@ -9,7 +9,7 @@ import {
     AccountCircleOutlined,
     AppsRound,
     Brightness6Filled,
-    DnsOutlined,
+    DnsOutlined, ExitToAppFilled,
     MyLocationRound,
     SpaceDashboardOutlined
 } from "@vicons/material";
@@ -111,6 +111,10 @@ const sidebarOption = computed<{
             }]
         }],
         bottom: [{
+            label: () => h(RouterLink, {to: {name: 'auth.logout'}}, {default: () => '退出登录'}),
+            key: 'auth.logout',
+            icon: renderIcon(ExitToAppFilled)
+        }, {
             label: '切换' + (dark.status ? '浅' : '深') + '色',
             key: 'darkmode.toggle',
             icon: renderIcon(Brightness6Filled)

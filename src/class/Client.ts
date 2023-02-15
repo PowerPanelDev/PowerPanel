@@ -59,6 +59,9 @@ const auth = {
     },
     login(name: string, password: string) {
         return Post('/api/public/auth/login', {name, password});
+    },
+    logout() {
+        return Get('/api/public/auth/logout', {});
     }
 }
 

@@ -3,6 +3,7 @@ import AuthViewVue from '@/views/AuthView.vue'
 import IndexViewVue from '@/views/IndexView.vue'
 import InstanceView from "@/views/InstanceView.vue";
 import BasicLayout from "@/layouts/BasicLayout.vue";
+import LogoutView from "@/views/LogoutView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -80,6 +81,10 @@ const router = createRouter({
         path: '/auth',
         name: 'auth',
         component: AuthViewVue
+    }, {
+        path: '/auth/logout',
+        name: 'auth.logout',
+        component: LogoutView
     }, {
         path: '/:pathMatch(.*)*',
         redirect: '/'
