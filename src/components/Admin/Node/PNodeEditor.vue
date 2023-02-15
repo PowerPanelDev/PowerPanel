@@ -73,6 +73,8 @@ const width: number = window.innerWidth;
 const create = computed(() => props.id == 'create');
 
 watch(() => props.id, (v) => !v || actions.init());
+
+const endpoint = window.location.origin;
 </script>
 
 <template>
@@ -158,6 +160,10 @@ watch(() => props.id, (v) => !v || actions.init());
 
                 <n-form-item label="创建时间" class="-mt-4" v-if="!create">
                     <n-time :time="new Date(data.created_at)"/>
+                </n-form-item>
+
+                <n-form-item label="部署命令">
+                    <n-input :value="'./node ' + endpoint + ' ' + data.panel_token" type="textarea" autosize readonly/>
                 </n-form-item>
 
                 <AllowSubmit/>
