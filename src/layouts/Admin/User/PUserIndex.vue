@@ -31,12 +31,12 @@ useAuthData().listen(() => {
         <PageHeader :breadcrumb="['管理面板', '用户管理']">
             <template #title>用户管理</template>
             <template #action>
-                <n-button type="primary" @click="id = 'create'">新建用户</n-button>
+                <n-button type="primary" text-color="white" @click="id = 'create'">新建用户</n-button>
             </template>
         </PageHeader>
     </PageContainer>
 
-    <hr/>
+    <n-divider class="my-0"/>
 
     <div class="mdui-container mt-4">
         <PUserList :data="data"/>

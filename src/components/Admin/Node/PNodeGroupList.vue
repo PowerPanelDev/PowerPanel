@@ -37,7 +37,8 @@ const columns: DataTableColumns<Row> = [{
         return h(PLink, {
             to: {name: 'admin.node.group', params: {groupId: row.id}},
             element: 'button',
-            size: 'small'
+            size: 'small',
+            'text-color': 'white'
         }, () => '修改');
     }
 }];

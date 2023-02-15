@@ -31,12 +31,12 @@ useAuthData().listen(() => {
         <PageHeader :breadcrumb="['管理面板', '镜像管理', '版本管理']">
             <template #title>版本列表</template>
             <template #action>
-                <n-button type="primary" @click="id = 'create'">新建版本</n-button>
+                <n-button type="primary" text-color="white" @click="id = 'create'">新建版本</n-button>
             </template>
         </PageHeader>
     </PageContainer>
 
-    <hr/>
+    <n-divider class="my-0"/>
 
     <div class="mdui-container mt-4">
         <PAppVersionList :data="data"/>

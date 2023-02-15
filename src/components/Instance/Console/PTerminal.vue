@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {Terminal} from "xterm";
-import {onMounted, onUnmounted, ref} from "vue";
+import {onMounted, onUnmounted, ref, watch} from "vue";
 import {FitAddon} from "xterm-addon-fit";
 import config from '@/config/terminal.json'
 import 'xterm/css/xterm.css';
@@ -9,8 +9,10 @@ import type {IWebSocketPacket} from '@/stores/Instance/WebSocketStore';
 import {useWebSocketStore} from "@/stores/Instance/WebSocketStore";
 import {Base64} from "@/class/Base64";
 import {InstanceStatus as S} from "@/class/Constant/Status";
+import {useDarkMode} from "@/stores/DarkModeStore";
 
-const terminal = new Terminal(config);
+const dark = useDarkMode();
+const terminal = new Terminal(config[dark.status ? 'onedark-pro-darker' : 'light']);
 const fitAddon = new FitAddon();
 const xterm = ref(null);
 const command = ref('');
@@ -35,16 +37,16 @@ onMounted(() => {
     fitAddon.fit();
 });
 
-window.addEventListener("resize", () => fitAddon.fit());
+window.addEventListener('resize', () => fitAddon.fit());
 
 const cancel = WebSocketStore.listen((data: IWebSocketPacket) => {
     if (data.type in {'history': 1, 'stdout': 1}) {
         terminal.write(Base64.decode(data.data));
     } else if (data.type == 'status') {
         if (data.msg)
-            terminal.writeln('\x1b[1;33m[PowerPanel] \x1b[0;30m' + data.msg);
+            terminal.writeln('\x1b[1;33m[PowerPanel] \x1b[0;3' + (dark.status ? '9' : '0') + 'm' + data.msg);
         else
-            terminal.writeln('\x1b[1;33m[PowerPanel] \x1b[0;30m' + (tips[data.data] ?? ''));
+            terminal.writeln('\x1b[1;33m[PowerPanel] \x1b[0;3' + (dark.status ? '9' : '0') + 'm' + (tips[data.data] ?? ''));
     }
 });
 
@@ -60,11 +62,15 @@ function onCommand() {
     });
     command.value = '';
 }
+
+watch(() => dark.status, (v: boolean) => {
+    terminal.options.theme = config[v ? 'onedark-pro-darker' : 'light'].theme;
+});
 </script>
 
 <template>
     <div>
-        <div class="border rounded-md">
+        <div class="border rounded-md" :class="{ 'border-theme': dark.status }">
             <div class="px-[.8rem] pt-[.6rem]">
                 <div ref="xterm" class="terminal"></div>
             </div>
@@ -74,7 +80,7 @@ function onCommand() {
                              :color="colors.indigo[500]" @keyup.enter="onCommand"/>
                 </div>
                 <div class="ml-2">
-                    <n-button type="primary" size="large" @click="onCommand">发送</n-button>
+                    <n-button type="primary" size="large" @click="onCommand" text-color="white">发送</n-button>
                 </div>
             </div>
         </div>
@@ -98,5 +104,9 @@ function onCommand() {
 .terminal:deep(.xterm-viewport::-webkit-scrollbar-thumb) {
     border-radius: 3px;
     background: rgba(0, 0, 0, 0.2);
+}
+
+.border-theme {
+    border-color: rgba(255, 255, 255, 0.09);
 }
 </style>

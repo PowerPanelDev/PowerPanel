@@ -45,7 +45,8 @@ const columns: DataTableColumns<Row> = [{
         return h(PLink, {
             to: {name: 'admin.app.index', params: {appId: row.id}},
             element: 'button',
-            size: 'small'
+            size: 'small',
+            'text-color': 'white'
         }, () => '修改');
     }
 }];

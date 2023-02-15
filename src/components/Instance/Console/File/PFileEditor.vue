@@ -5,21 +5,26 @@ import {useMessage} from "naive-ui";
 import {nextTick, onMounted, ref, watch} from "vue";
 import modes from '@/config/ace.modes.json'
 import useLoadScript from "@/class/useLoadScripts";
+import {useDarkMode} from "@/stores/DarkModeStore";
 
 const props = defineProps(['insId', 'path', 'clicked', 'reload', 'show']);
 const emits = defineEmits(['update:show']);
 const message = useMessage();
 const editorRef = ref(null);
+const aceBase = 'https://cdn.staticfile.org/ace/1.15.1';
+const dark = useDarkMode();
 
 let editor: any;
 
 onMounted(() => {
     watch(() => props.show, async (v) => {
         if (!v) return;
-        await useLoadScript(['https://cdn.staticfile.org/ace/1.14.0/ace.min.js']);
+        await useLoadScript([aceBase + '/ace.min.js']);
         await nextTick(() => {
             editor = (window as any).ace.edit(editorRef.value!!);
-            (window as any).ace.config.set('basePath', 'https://cdn.staticfile.org/ace/1.14.0/');
+            (window as any).ace.config.set('basePath', aceBase);
+            editor.setTheme('ace/theme/' + (dark.status ? 'one_dark' : 'chrome'));
+            editor.setShowPrintMargin(false);
             editor.session.setMode('ace/mode/' + (modes as any)[props.clicked.split('.').pop()]);
             editor.commands.addCommand({
                 name: 'save',
@@ -65,7 +70,7 @@ const width: number = window.innerWidth;
             </template>
             <div ref="editorRef" class="editor" @keyup.ctrl.enter="() => onConfirm"></div>
             <template #footer>
-                <n-button type="primary" @click="onConfirm">保存</n-button>
+                <n-button type="primary" text-color="white" @click="onConfirm">保存</n-button>
             </template>
         </n-drawer-content>
     </n-drawer>

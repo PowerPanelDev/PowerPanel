@@ -48,7 +48,7 @@ const actions = {
                         <n-input v-model:value="input.pass" type="password" placeholder="输入密码" class="mt-4"
                                  size="large"/>
 
-                        <n-button block type="primary" class="button" size="large" @click="actions.login()">
+                        <n-button block type="primary" text-color="white" class="button" size="large" @click="actions.login()">
                             登录
                             <n-icon class="ml-0.5" :size="16">
                                 <ArrowForwardOutlined/>

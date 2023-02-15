@@ -44,7 +44,7 @@ const actions = {
                         </template>
                         <n-input-group>
                             <n-input v-model:value="name" @keyup.enter="actions.rename()"/>
-                            <n-button type="primary" @click="actions.rename()">
+                            <n-button type="primary" text-color="white" @click="actions.rename()">
                                 更改
                             </n-button>
                         </n-input-group>

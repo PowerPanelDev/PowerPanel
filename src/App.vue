@@ -5,11 +5,16 @@ import {useRouter} from 'vue-router';
 import colors from 'tailwindcss/colors';
 import type {GlobalThemeOverrides} from "naive-ui";
 import GlobalMessage from "@/components/GlobalMessage.vue";
+import {darkTheme} from "naive-ui";
+import vhCheck from "vh-check";
+import {useDarkMode} from "@/stores/DarkModeStore";
 
 const AuthData = useAuthData();
 const router = useRouter();
 
 onMounted(() => {
+    vhCheck();
+
     AuthData.load(() => {
         if (!AuthData.status) {
             router.isReady().then(() => router.push('/auth'));
@@ -17,6 +22,8 @@ onMounted(() => {
         }
     });
 });
+
+const dark = useDarkMode();
 
 const theme: GlobalThemeOverrides = {
     common: {
@@ -26,7 +33,8 @@ const theme: GlobalThemeOverrides = {
         primaryColorSuppl: colors.indigo[500]
     },
     Tabs: {
-        tabTextColorLine: '#767c82',
+        tabBorderColor: 'transparent',
+        tabTextColorLine: dark.status ? colors.gray[300] : '#767c82',
         tabGapMediumLine: '24px'
     },
     Progress: {
@@ -36,7 +44,7 @@ const theme: GlobalThemeOverrides = {
 </script>
 
 <template>
-    <n-config-provider :theme-overrides="theme">
+    <n-config-provider :theme="dark.status ? darkTheme : {}" :theme-overrides="theme">
         <n-message-provider>
             <GlobalMessage/>
             <RouterView/>

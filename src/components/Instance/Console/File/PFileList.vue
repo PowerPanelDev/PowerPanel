@@ -233,9 +233,9 @@ const onEmptyMenu = () => {
                             <div class="actions mt-1">
                                 <n-dropdown trigger="click" :options="dropdown.items" class="min-w-[120px]"
                                             @select="dropdown.event.onSelect">
-                                    <n-button type="primary" ghost size="small" @click="onEmptyMenu">打开菜单</n-button>
+                                    <n-button type="primary" text-color="white" ghost size="small" @click="onEmptyMenu">打开菜单</n-button>
                                 </n-dropdown>
-                                <n-button type="primary" ghost @click="actions.enter('..')" size="small"
+                                <n-button type="primary" text-color="white" ghost @click="actions.enter('..')" size="small"
                                           v-if="path !== '/'">
                                     返回上层
                                 </n-button>
