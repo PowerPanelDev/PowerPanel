@@ -9,7 +9,7 @@ import PUserList from "@/components/Admin/App/PUserList.vue";
 import PUserEditor from "@/components/Admin/App/PUserEditor.vue";
 
 const data = ref([]);
-const load = () => admin.user.list((res) => {
+const load = () => admin.user.list().then(res => {
     data.value = res.data.data;
 });
 const route = useRoute();
@@ -31,12 +31,12 @@ useAuthData().listen(() => {
         <PageHeader :breadcrumb="['管理面板', '用户管理']">
             <template #title>用户管理</template>
             <template #action>
-                <n-button type="primary" @click="id = 'create'">新建用户</n-button>
+                <n-button type="primary" text-color="white" @click="id = 'create'">新建用户</n-button>
             </template>
         </PageHeader>
     </PageContainer>
 
-    <hr/>
+    <n-divider class="my-0"/>
 
     <div class="mdui-container mt-4">
         <PUserList :data="data"/>

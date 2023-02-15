@@ -12,7 +12,7 @@ const message = useMessage();
 watch(() => props.show, (v) => {
     if (!v) return;
     input.value = 'Loading...';
-    ins.file.permission.get(props.insId, Base64.encode(props.path + Base64.decode(props.selected[0].base64)), res => {
+    ins.file.permission.get(props.insId, Base64.encode(props.path + Base64.decode(props.selected[0].base64))).then(res => {
         input.value = res.data.attributes.permission;
     });
 });
@@ -21,12 +21,11 @@ function onConfirm() {
     ins.file.permission.set(
         props.insId,
         Base64.encode(props.path + Base64.decode(props.selected[0].base64)),
-        input.value,
-        () => {
-            if (props.reload) props.reload();
-            message.success('更改权限操作成功');
-        }
-    );
+        input.value
+    ).then(() => {
+        if (props.reload) props.reload();
+        message.success('更改权限操作成功');
+    });
     close();
 }
 

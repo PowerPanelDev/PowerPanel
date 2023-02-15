@@ -16,7 +16,7 @@ function onChange(options: { fileList: UploadFileInfo[] }) {
     files.value = options.fileList;
 }
 
-function submit() {
+async function submit() {
     let size = 0,
         count = 0;
     const formData = new FormData();
@@ -27,57 +27,57 @@ function submit() {
         count++;
     });
 
-    ins.file.upload(props.insId, Base64.encode(props.path), async (res) => {
-        const sliceSize: number = res.data.attributes.max_slice_size;
-        if (size > sliceSize) {
-            // 切片上传
-            let uploadedSize = 0,
-                uploadedCount = 0;
+    const res = await ins.file.upload(props.insId, Base64.encode(props.path));
 
-            message.info('总大小较大，将采用分块方式上传');
-            const wait = message.loading('文件上传中：0%，已完成：0/' + count + ' 个文件', {duration: 0});
-            close();
+    const sliceSize: number = res.data.attributes.max_slice_size;
+    if (size > sliceSize) {
+        // 切片上传
+        let uploadedSize = 0,
+            uploadedCount = 0;
 
-            for (let i in files.value) {
-                const file = files.value[i];
-                let current = 0;
+        message.info('总大小较大，将采用分块方式上传');
+        const wait = message.loading('文件上传中：0%，已完成：0/' + count + ' 个文件', {duration: 0});
+        close();
 
-                while (current < file.file?.size!!) {
-                    const chunk = new FormData,
-                        slice = file.file?.slice(current, current + sliceSize);
-                    chunk.append(file.file?.name!!, slice!!, file.file?.name);
-                    await axios.post(res.data.attributes.url + '&slice=1&first=' + (current ? 0 : 1), chunk);
+        for (let i in files.value) {
+            const file = files.value[i];
+            let current = 0;
 
-                    current += sliceSize;
-                    uploadedSize += slice!!.size;
+            while (current < file.file?.size!!) {
+                const chunk = new FormData,
+                    slice = file.file?.slice(current, current + sliceSize);
+                chunk.append(file.file?.name!!, slice!!, file.file?.name);
+                await axios.post(res.data.attributes.url + '&slice=1&first=' + (current ? 0 : 1), chunk);
 
-                    wait.content = '文件上传中：' + Math.floor(uploadedSize / size * 100) + '%，已上传：' + uploadedCount + '/' + count + ' 个文件';
-                }
+                current += sliceSize;
+                uploadedSize += slice!!.size;
 
-                uploadedCount++;
+                wait.content = '文件上传中：' + Math.floor(uploadedSize / size * 100) + '%，已上传：' + uploadedCount + '/' + count + ' 个文件';
             }
 
-            wait.destroy();
-            message.success('文件上传完成');
-            props.reload();
-        } else {
-            const wait = message.loading('文件上传中：0%', {duration: 0});
-            axios.post(res.data.attributes.url, formData, {
-                onUploadProgress(e: AxiosProgressEvent) {
-                    wait.content = '文件上传中：' + Math.floor(e.progress!! * 100) + '%';
-                }
-            }).then(() => {
-                message.success('上传完成');
-                props.reload();
-            }).catch((res) => {
-                const data = res.response.data;
-                message.error(data.code + ' 错误：' + data.msg);
-            }).finally(() => {
-                wait.destroy();
-            });
-            close();
+            uploadedCount++;
         }
-    });
+
+        wait.destroy();
+        message.success('文件上传完成');
+        props.reload();
+    } else {
+        const wait = message.loading('文件上传中：0%', {duration: 0});
+        axios.post(res.data.attributes.url, formData, {
+            onUploadProgress(e: AxiosProgressEvent) {
+                wait.content = '文件上传中：' + Math.floor(e.progress!! * 100) + '%';
+            }
+        }).then(() => {
+            message.success('上传完成');
+            props.reload();
+        }).catch((res) => {
+            const data = res.response.data;
+            message.error(data.code + ' 错误：' + data.msg);
+        }).finally(() => {
+            wait.destroy();
+        });
+        close();
+    }
 }
 
 function close() {

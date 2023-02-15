@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --vh-offset: 0px;
+}
+
 body {
     margin: 0;
     font-weight: 400;
@@ -49,4 +53,13 @@ ul {
 
 .n-drawer-footer > * {
     margin-left: 10px !important;
+}
+
+.n-layout {
+    height: calc(100vh - var(--vh-offset));
+}
+
+.n-divider.my-0 {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }

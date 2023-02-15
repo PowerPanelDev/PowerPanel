@@ -9,7 +9,7 @@ import {useAuthData} from "@/stores/AuthStore";
 import {admin} from "@/class/Client";
 
 const data = ref([]);
-const load = () => admin.app.game.list((res) => {
+const load = () => admin.app.game.list().then(res => {
     data.value = res.data.data;
 });
 const route = useRoute();
@@ -31,12 +31,12 @@ useAuthData().listen(() => {
         <PageHeader :breadcrumb="['管理面板', '镜像管理', '游戏管理']">
             <template #title>游戏列表</template>
             <template #action>
-                <n-button type="primary" @click="id = 'create'">新建游戏</n-button>
+                <n-button type="primary" text-color="white" @click="id = 'create'">新建游戏</n-button>
             </template>
         </PageHeader>
     </PageContainer>
 
-    <hr/>
+    <n-divider class="my-0"/>
 
     <div class="mdui-container mt-4">
         <PAppGameList :data="data"/>

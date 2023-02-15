@@ -6,6 +6,7 @@ import {ByteFormat} from '@/class/ByteFormat';
 import PageHeader from '@/components/PageHeader.vue';
 import PageContainer from "@/components/PageContainer.vue";
 import {InstanceStatus as S} from "@/class/Constant/Status";
+import {useDarkMode} from "@/stores/DarkModeStore";
 
 interface Instance {
     id: number,
@@ -46,10 +47,12 @@ const statusChart = {
 };
 
 AuthData.listen(() => {
-    ins.list(res => {
-        list.value = res.data.data
+    ins.list().then(res => {
+        list.value = res.data.data;
     });
 });
+
+const dark = useDarkMode();
 </script>
 
 <template>
@@ -57,22 +60,23 @@ AuthData.listen(() => {
         <PageHeader :breadcrumb="['控制面板', '实例列表']">
             <template #title>实例列表</template>
             <template #action>
-                <n-button type="primary" v-if="AuthData.is_admin" size="large">新建实例</n-button>
+                <n-button type="primary" text-color="white" v-if="AuthData.is_admin" size="large">新建实例</n-button>
             </template>
         </PageHeader>
         <div v-if="list.length" class="mt-6">
             <div class="grid md:grid-cols-2 gap-4">
                 <RouterLink :to="{name: 'instance.detail', params: {insId: ins.id}}"
-                            class="border-2 border-gray-200 hover:border-transparent outline outline-0 hover:outline-[4px] outline-indigo-400 transition-all duration-75 rounded-md px-4 py-3 last:mb-0"
+                            class="border-2 hover:border-transparent outline outline-0 hover:outline-[4px] outline-indigo-400 transition-all duration-100 rounded-md px-4 py-3 last:mb-0"
+                            :class="dark.status ? ['border-gray-400'] : ['border-gray-200']"
                             v-for="ins in list" :key="ins.id">
-                    <div class="text-gray-600 text-lg flex items-center">
+                    <div class="text-lg flex items-center" :class="dark.status ? ['text-gray-300'] : ['text-gray-600']">
                         <n-tag :type="statusChart[ins.stats.status].type" size="small"
                                class="mr-[.4rem]">
                             {{ statusChart[ins.stats.status].slot }}
                         </n-tag>
                         {{ (ins.name) || ins.uuid.split('-')[0] }}
                     </div>
-                    <div class="text-gray-500 text-base">
+                    <div class="text-base" :class="dark.status ? ['text-gray-300'] : ['text-gray-500']">
                         {{ ins.cpu }}% CPU ·
                         {{ ByteFormat(ins.memory * 1024 * 1024, true) }} 内存 ·
                         {{ ByteFormat(ins.disk * 1024 * 1024, true) }} 存储
@@ -82,7 +86,8 @@ AuthData.listen(() => {
         </div>
         <div v-else class="mt-5">
             <div
-                class="border-4 border-dashed border-gray-200 hover:outline-[4px] hover:border-indigo-400 transition-all duration-150 rounded-md px-2 py-8 last:mb-0 text-center">
+                class="border-4 border-dashed hover:outline-[4px] hover:border-indigo-400 transition-all duration-150 rounded-md px-2 py-8 last:mb-0 text-center"
+                :class="{ 'border-gray-400': dark.status, 'border-gray-200': !dark.status }">
                 <div class="text-gray-500">此账号下无有效实例。</div>
             </div>
         </div>

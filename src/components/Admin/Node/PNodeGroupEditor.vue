@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import {computed, ref, watch} from "vue";
 import {admin} from "@/class/Client";
-import {MentionOption, useMessage} from "naive-ui";
+import {useMessage} from "naive-ui";
 import AllowSubmit from "@/components/AllowSubmit.vue";
-import PSelector from "@/components/PSelector.vue";
 
 const props = defineProps(['id']);
 const emits = defineEmits(['update:id', 'reload']);
@@ -11,13 +10,11 @@ const message = useMessage();
 
 const initData = {
     id: 0,
-    app_id: '',
     name: '',
-    version: '',
+    description: '',
     created_at: 0,
     updated_at: 0
 };
-const apps = ref<MentionOption[]>([]);
 const data = ref(initData);
 const actions = {
     init() {
@@ -25,30 +22,25 @@ const actions = {
         actions.load();
     },
     load() {
-        admin.app.list().then(res => {
-            apps.value = res.data.data.map((v: { id: number, name: string }) => {
-                return {label: v.id + '-' + v.name, value: v.id};
-            });
-        });
         if (create.value) return;
-        admin.app.version.detail(props.id).then(res => {
+        admin.node.group.detail(props.id).then(res => {
             data.value = res.data.attributes;
         });
     },
     confirm() {
         if (create.value) {
-            admin.app.version.create(data.value).then(() => {
-                actions.close('版本创建成功。', true);
+            admin.node.group.create(data.value).then(() => {
+                actions.close('节点组创建成功。', true);
             });
         } else {
-            admin.app.version.update(props.id, data.value).then(() => {
-                actions.close('版本修改成功。', true);
+            admin.node.group.update(props.id, data.value).then(() => {
+                actions.close('节点组修改成功。', true);
             });
         }
     },
     delete() {
-        admin.app.version.delete(props.id).then(() => {
-            actions.close('版本删除成功。', true);
+        admin.node.group.delete(props.id).then(() => {
+            actions.close('节点组删除成功。', true);
         });
     },
     close(msg?: string, reload?: boolean) {
@@ -67,24 +59,20 @@ watch(() => props.id, (v) => !v || actions.init());
     <n-drawer :default-width="Math.min(768, width)" resizable placement="right" :mask-closable="false"
               :show="!!id" @update:show="actions.close">
         <n-drawer-content closable :native-scrollbar="false">
-            <template #header>{{ create ? '创建版本' : '修改版本' }}</template>
+            <template #header>{{ create ? '创建节点组' : '修改节点组' }}</template>
 
-            <n-form :model="data" label-placement="left" :label-width="68" class="mt-2"
+            <n-form :model="data" label-placement="left" :label-width="84" class="mt-2"
                     @submit.prevent="actions.confirm()">
                 <n-form-item label="ID" v-if="!create">
                     <n-input-number v-model:value="data.id" readonly/>
                 </n-form-item>
 
                 <n-form-item label="名称">
-                    <n-input v-model:value="data.name" placeholder="输入版本名称"/>
+                    <n-input v-model:value="data.name" placeholder="输入节点组名称"/>
                 </n-form-item>
 
-                <n-form-item label="值">
-                    <n-input v-model:value="data.version" placeholder="输入版本值"/>
-                </n-form-item>
-
-                <n-form-item label="所属镜像">
-                    <PSelector v-model="data.app_id" :list="apps"/>
+                <n-form-item label="节点组简介">
+                    <n-input v-model:value="data.description" placeholder="输入节点组简介" type="textarea"/>
                 </n-form-item>
 
                 <n-form-item label="更新时间" v-if="!create">

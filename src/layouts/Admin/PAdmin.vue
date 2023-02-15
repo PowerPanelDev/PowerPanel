@@ -7,6 +7,7 @@ import {admin} from "@/class/Client";
 import {ref} from "vue";
 import {ArrowForwardOutlined} from "@vicons/material";
 import PLink from "@/components/PLink.vue";
+import {useDarkMode} from "@/stores/DarkModeStore";
 
 interface INode {
     id: number,
@@ -28,10 +29,12 @@ const AuthData = useAuthData();
 const data = ref<IData>();
 
 AuthData.listen(() => {
-    admin.fetch((res) => {
+    admin.fetch().then(res => {
         data.value = res.data.attributes;
     });
 });
+
+const dark = useDarkMode();
 </script>
 
 <template>
@@ -41,7 +44,7 @@ AuthData.listen(() => {
         </PageHeader>
     </PageContainer>
 
-    <hr/>
+    <n-divider class="my-0"/>
 
     <div class="mdui-container md:columns-3 gap-4 mt-4" v-if="data">
         <PAdminStatus>
@@ -50,8 +53,8 @@ AuthData.listen(() => {
                 <n-number-animation :duration="1500" :to="data?.node.length"/>
             </template>
             <template #addition>
-                <div class="text-gray-600 mt-2">节点负载</div>
-                <div v-for="node in data?.node" :key="node.id" class="text-gray-500 mt-1">
+                <div class="mt-2" :class="{ 'text-gray-600': !dark.status }">节点负载</div>
+                <div v-for="node in data?.node" :key="node.id" class="mt-1" :class="{ 'text-gray-500': !dark.status }">
                     <div class="flex justify-between">
                         <div>{{ node.name }}</div>
                         <div>{{ node.load }}</div>

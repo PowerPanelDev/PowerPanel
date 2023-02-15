@@ -1,21 +1,50 @@
 {
-  "theme": {
-    "background": "white",
-    "black": "#011627",
-    "blue": "#4876D6",
-    "brightBlack": "#7A8181",
-    "brightBlue": "#5CA7E4",
-    "brightCyan": "#00C990",
-    "brightGreen": "#49D0C5",
-    "brightRed": "#F76E6E",
-    "brightWhite": "#989FB1",
-    "brightYellow": "#DAC26B",
-    "cyan": "#08916A",
-    "foreground": "#403F53",
-    "green": "#2AA298",
-    "red": "#D3423E",
-    "white": "#7A8181",
-    "yellow": "#DAAA01"
+  "light": {
+    "theme": {
+      "cursor": "transparent",
+      "background": "white",
+      "black": "#011627",
+      "blue": "#4876D6",
+      "brightBlack": "#7A8181",
+      "brightBlue": "#5CA7E4",
+      "brightCyan": "#00C990",
+      "brightGreen": "#49D0C5",
+      "brightRed": "#F76E6E",
+      "brightWhite": "#989FB1",
+      "brightYellow": "#DAC26B",
+      "cyan": "#08916A",
+      "foreground": "#403F53",
+      "green": "#2AA298",
+      "red": "#D3423E",
+      "white": "#7A8181",
+      "yellow": "#DAAA01"
+    },
+    "fontFamily": "Consolas, Microsoft YaHei, monospace"
   },
-  "fontFamily": "Consolas, Microsoft YaHei, monospace"
+  "onedark-pro-darker": {
+    "theme": {
+      "cursor": "transparent",
+      "ansiBlack": "#3f4451",
+      "ansiBlue": "#4aa5f0",
+      "ansiBrightBlack": "#4f5666",
+      "ansiBrightBlue": "#4dc4ff",
+      "ansiBrightCyan": "#4cd1e0",
+      "ansiBrightGreen": "#a5e075",
+      "ansiBrightMagenta": "#de73ff",
+      "ansiBrightRed": "#ff616e",
+      "ansiBrightWhite": "#e6e6e6",
+      "ansiBrightYellow": "#f0a45d",
+      "ansiCyan": "#42b3c2",
+      "ansiGreen": "#8cc265",
+      "ansiMagenta": "#c162de",
+      "ansiRed": "#e05561",
+      "ansiWhite": "#d7dae0",
+      "ansiYellow": "#d18f52",
+      "background": "rgb(16, 16, 20)",
+      "border": "#3e4452",
+      "foreground": "#abb2bf",
+      "selectionForeground": "#abb2bf30"
+    },
+    "fontFamily": "Consolas, Microsoft YaHei, monospace"
+  }
 }

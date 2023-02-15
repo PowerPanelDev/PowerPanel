@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import {DataTableColumns, NTag, NText, NTime} from "naive-ui";
-import {h, ref} from "vue";
-import {useAuthData} from "@/stores/AuthStore";
-import {admin} from "@/class/Client";
+import {h} from "vue";
 import {ByteFormat} from "@/class/ByteFormat";
 import PLink from "@/components/PLink.vue";
+
+defineProps(['data']);
 
 interface Row {
     id: number
@@ -64,17 +64,11 @@ const columns: DataTableColumns<Row> = [{
         return h(PLink, {
             to: {name: 'admin.node.index', params: {nodeId: row.id}},
             element: 'button',
-            size: 'small'
+            size: 'small',
+            'text-color': 'white'
         }, () => '修改');
     }
 }];
-const data = ref<Row[]>([]);
-
-useAuthData().listen(() => {
-    admin.node.list((res) => {
-        data.value = res.data.data;
-    });
-});
 </script>
 
 <template>

@@ -16,10 +16,10 @@ detail.listen(() => name.value = detail.name ?? detail.uuid?.split('-')[0]);
 
 const actions = {
     rename() {
-        ins.rename(detail.id!!, name.value!!, () => {
+        ins.rename(detail.id!, name.value!).then(() => {
             namePopover.value = false;
             message.success('实例名称更改成功');
-            useInstanceDetail().name = name.value!!;
+            detail.name = name.value!;
         });
     }
 }
@@ -44,7 +44,7 @@ const actions = {
                         </template>
                         <n-input-group>
                             <n-input v-model:value="name" @keyup.enter="actions.rename()"/>
-                            <n-button type="primary" @click="actions.rename()">
+                            <n-button type="primary" text-color="white" @click="actions.rename()">
                                 更改
                             </n-button>
                         </n-input-group>

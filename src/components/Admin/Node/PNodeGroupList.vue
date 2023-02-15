@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import {DataTableColumns, NTag, NTime} from "naive-ui";
-import {h, ref} from "vue";
-import {useAuthData} from "@/stores/AuthStore";
-import {admin} from "@/class/Client";
+import {h} from "vue";
 import PLink from "@/components/PLink.vue";
+
+defineProps(['data']);
 
 interface Row {
     id: number
@@ -37,17 +37,11 @@ const columns: DataTableColumns<Row> = [{
         return h(PLink, {
             to: {name: 'admin.node.group', params: {groupId: row.id}},
             element: 'button',
-            size: 'small'
+            size: 'small',
+            'text-color': 'white'
         }, () => '修改');
     }
 }];
-const data = ref<Row[]>([]);
-
-useAuthData().listen(() => {
-    admin.node.group.list((res) => {
-        data.value = res.data.data;
-    });
-});
 </script>
 
 <template>

@@ -24,8 +24,8 @@ const layoutName = computed(() => {
 const router = useRouter();
 
 useAuthData().listen(() => {
-    ins.fetch(insId, res => {
-        detail.init(res.data.attributes)
+    ins.fetch(insId).then(res => {
+        detail.init(res.data.attributes);
     });
 });
 
@@ -70,7 +70,7 @@ const tab = computed({
                 <div class="action" v-if="routeName === 'instance.console'">
                     <n-dropdown trigger="click" :options="options" class="min-w-[96px]" placement="bottom-end"
                                 @select="onPowerAction">
-                        <n-button type="primary">操作</n-button>
+                        <n-button type="primary" text-color="white">操作</n-button>
                     </n-dropdown>
                 </div>
             </template>
@@ -90,7 +90,7 @@ const tab = computed({
         </PageHeader>
     </PageContainer>
 
-    <hr/>
+    <n-divider class="my-0"/>
 
     <RouterView/>
 </template>

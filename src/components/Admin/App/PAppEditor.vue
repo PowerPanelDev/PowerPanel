@@ -6,6 +6,7 @@ import type {MentionOption} from 'naive-ui';
 import {DataPath} from "@/class/DataPath";
 import AllowSubmit from "@/components/AllowSubmit.vue";
 import PSelector from "@/components/PSelector.vue";
+import PSwitch from "@/components/PSwitch.vue";
 
 const props = defineProps(['id']);
 const emits = defineEmits(['update:id', 'reload']);
@@ -37,7 +38,7 @@ const actions = {
         actions.load();
     },
     load() {
-        admin.app.game.list(res => {
+        admin.app.game.list().then(res => {
             games.value = res.data.data.map((v: { id: number, name: string }) => {
                 return {label: v.id + '-' + v.name, value: v.id};
             });
@@ -46,25 +47,25 @@ const actions = {
             dataPath.value = DataPath.Parse(data.value.data_path);
             return;
         }
-        admin.app.detail(props.id, res => {
+        admin.app.detail(props.id).then(res => {
             data.value = res.data.attributes;
             dataPath.value = DataPath.Parse(data.value.data_path);
-        })
+        });
     },
     confirm() {
         data.value.data_path = DataPath.Build(dataPath.value);
         if (create.value) {
-            admin.app.create(data.value, () => {
+            admin.app.create(data.value).then(() => {
                 actions.close('镜像创建成功。', true);
             });
         } else {
-            admin.app.update(props.id, data.value, () => {
+            admin.app.update(props.id, data.value).then(() => {
                 actions.close('镜像修改成功。', true);
             });
         }
     },
     delete() {
-        admin.app.delete(props.id, () => {
+        admin.app.delete(props.id).then(() => {
             actions.close('镜像删除成功。', true);
         });
     },
@@ -152,7 +153,7 @@ const tab = ref('general');
                 </n-form-item>
 
                 <n-form-item label="跳过安装" v-if="tab === 'install'">
-                    <n-switch v-model:value="data.skip_install"/>
+                    <PSwitch v-model="data.skip_install" element="switch"/>
                 </n-form-item>
 
                 <n-form-item label="安装镜像" v-if="tab === 'install'">
@@ -177,7 +178,7 @@ const tab = ref('general');
 
             <template #footer>
                 <n-button type="error" ghost @click="actions.delete()" v-if="!create">删除</n-button>
-                <n-button type="primary" @click="actions.confirm()">{{ create ? '创建' : '修改' }}</n-button>
+                <n-button type="primary" text-color="white" @click="actions.confirm()">{{ create ? '创建' : '修改' }}</n-button>
             </template>
         </n-drawer-content>
     </n-drawer>

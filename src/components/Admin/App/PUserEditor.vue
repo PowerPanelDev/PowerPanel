@@ -3,6 +3,7 @@ import {computed, ref, watch} from "vue";
 import {admin} from "@/class/Client";
 import {useMessage} from "naive-ui";
 import AllowSubmit from "@/components/AllowSubmit.vue";
+import PSwitch from "@/components/PSwitch.vue";
 
 const props = defineProps(['id']);
 const emits = defineEmits(['update:id', 'reload']);
@@ -25,23 +26,23 @@ const actions = {
     },
     load() {
         if (create.value) return;
-        admin.user.detail(props.id, res => {
+        admin.user.detail(props.id).then(res => {
             data.value = res.data.attributes;
-        })
+        });
     },
     confirm() {
         if (create.value) {
-            admin.user.create(data.value, () => {
+            admin.user.create(data.value).then(() => {
                 actions.close('用户创建成功。', true);
             });
         } else {
-            admin.user.update(props.id, data.value, () => {
+            admin.user.update(props.id, data.value).then(() => {
                 actions.close('用户修改成功。', true);
             });
         }
     },
     delete() {
-        admin.user.delete(props.id, () => {
+        admin.user.delete(props.id).then(() => {
             actions.close('用户删除成功。', true);
         });
     },
@@ -55,15 +56,6 @@ const width: number = window.innerWidth;
 const create = computed(() => props.id == 'create');
 
 watch(() => props.id, (v) => !v || actions.init());
-
-const isAdmin = computed({
-    get() {
-        return data.value.is_admin == 1;
-    },
-    set(v) {
-        data.value.is_admin = {true: 1, false: 0}[v.toString()]!;
-    }
-});
 </script>
 
 <template>
@@ -92,7 +84,7 @@ const isAdmin = computed({
                 </n-form-item>
 
                 <n-form-item label="类型">
-                    <n-checkbox v-model:checked="isAdmin">管理员账号</n-checkbox>
+                    <PSwitch v-model="data.is_admin">管理员账号</PSwitch>
                 </n-form-item>
 
                 <n-form-item label="更新时间" v-if="!create">
@@ -108,7 +100,7 @@ const isAdmin = computed({
 
             <template #footer>
                 <n-button type="error" ghost @click="actions.delete()" v-if="!create">删除</n-button>
-                <n-button type="primary" @click="actions.confirm()">{{ create ? '创建' : '修改' }}</n-button>
+                <n-button type="primary" text-color="white" @click="actions.confirm()">{{ create ? '创建' : '修改' }}</n-button>
             </template>
         </n-drawer-content>
     </n-drawer>

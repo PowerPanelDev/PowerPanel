@@ -9,7 +9,7 @@ import {useAuthData} from "@/stores/AuthStore";
 import PAppEditor from "@/components/Admin/App/PAppEditor.vue";
 
 const data = ref([]);
-const load = () => admin.app.list((res) => {
+const load = () => admin.app.list().then(res => {
     data.value = res.data.data;
 });
 const route = useRoute();
@@ -31,12 +31,12 @@ useAuthData().listen(() => {
         <PageHeader :breadcrumb="['管理面板', '镜像管理']">
             <template #title>镜像列表</template>
             <template #action>
-                <n-button type="primary" @click="id = 'create'">新建镜像</n-button>
+                <n-button type="primary" text-color="white" @click="id = 'create'">新建镜像</n-button>
             </template>
         </PageHeader>
     </PageContainer>
 
-    <hr/>
+    <n-divider class="my-0"/>
 
     <div class="mdui-container mt-4">
         <PAppList :data="data"/>

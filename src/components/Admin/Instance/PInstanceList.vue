@@ -12,7 +12,7 @@ interface Row {
     relationship: {
         user: {
             id: number
-            nickname: string
+            name: string
         }
     }
     node: {
@@ -48,7 +48,7 @@ const columns: DataTableColumns<Row> = [{
                 name: 'admin.user.index',
                 params: {userId: row.relationship.user.id}
             }
-        }, () => row.relationship.user.nickname);
+        }, () => row.relationship.user.name);
     }
 }, {
     title: '节点', key: 'node', render(row: Row) {
@@ -83,14 +83,15 @@ const columns: DataTableColumns<Row> = [{
         return h(PLink, {
             to: {name: 'admin.instance', params: {insId: row.id}},
             element: 'button',
-            size: 'small'
+            size: 'small',
+            'text-color': 'white'
         }, () => '修改');
     }
 }];
 const data = ref<Row[]>();
 
 useAuthData().listen(() => {
-    admin.ins.list((res) => {
+    admin.ins.list().then(res => {
         data.value = res.data.data;
     });
 });

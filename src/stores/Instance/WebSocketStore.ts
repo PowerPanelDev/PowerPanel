@@ -27,7 +27,8 @@ export const useWebSocketStore = defineStore('WebSocketStore', {
         },
         init() {
             const detail = useInstanceDetail();
-            ins.getConsole(detail.id!!, res => {
+
+            ins.getConsole(detail.id!).then(res => {
                 const ws = new WebSocket(res.data.attributes.endpoint + '?instance=' + detail.uuid + '&token=' + res.data.attributes.token);
                 ws.onmessage = (e: { data: string; }) => {
                     this.event.forEach(te => {
@@ -40,7 +41,7 @@ export const useWebSocketStore = defineStore('WebSocketStore', {
                     if (data.type == 'status') {
                         detail.status = data.data;
                     }
-                })
+                });
             });
         },
         send(data: IWebSocketPacket) {

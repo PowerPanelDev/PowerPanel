@@ -16,7 +16,7 @@ watch(() => props.show, (v: Boolean) => {
 });
 
 function onConfirm() {
-    ins.file.create(props.insId, Base64.encode(props.path), type.value, Base64.encode(name.value), () => {
+    ins.file.create(props.insId, Base64.encode(props.path), type.value, Base64.encode(name.value)).then(() => {
         message.success('文件创建操作成功');
         props.reload();
         close();

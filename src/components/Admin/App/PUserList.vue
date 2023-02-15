@@ -42,7 +42,8 @@ const columns: DataTableColumns<Row> = [{
         return h(PLink, {
             to: {name: 'admin.user.index', params: {userId: row.id}},
             element: 'button',
-            size: 'small'
+            size: 'small',
+            'text-color': 'white'
         }, () => '修改');
     }
 }];

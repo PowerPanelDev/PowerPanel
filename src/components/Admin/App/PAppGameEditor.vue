@@ -23,23 +23,23 @@ const actions = {
     },
     load() {
         if (create.value) return;
-        admin.app.game.detail(props.id, res => {
+        admin.app.game.detail(props.id).then(res => {
             data.value = res.data.attributes;
-        })
+        });
     },
     confirm() {
         if (create.value) {
-            admin.app.game.create(data.value, () => {
+            admin.app.game.create(data.value).then(() => {
                 actions.close('游戏创建成功。', true);
             });
         } else {
-            admin.app.game.update(props.id, data.value, () => {
+            admin.app.game.update(props.id, data.value).then(() => {
                 actions.close('游戏修改成功。', true);
             });
         }
     },
     delete() {
-        admin.app.game.delete(props.id, () => {
+        admin.app.game.delete(props.id).then(() => {
             actions.close('游戏删除成功。', true);
         });
     },
@@ -88,7 +88,7 @@ watch(() => props.id, (v) => !v || actions.init());
 
             <template #footer>
                 <n-button type="error" ghost @click="actions.delete()" v-if="!create">删除</n-button>
-                <n-button type="primary" @click="actions.confirm()">{{ create ? '创建' : '修改' }}</n-button>
+                <n-button type="primary" text-color="white" @click="actions.confirm()">{{ create ? '创建' : '修改' }}</n-button>
             </template>
         </n-drawer-content>
     </n-drawer>
