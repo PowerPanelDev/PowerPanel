@@ -1,13 +1,15 @@
 import {useAuthData} from '@/stores/AuthStore';
 import axios from 'axios';
+import AppConfig from "../../app.config";
 
 function Get(url: string, params: {}) {
     const AuthStore = useAuthData();
-    return axios.get(url, {
+    return axios.get(AppConfig.api.endpoint + url, {
         params: {
             ...params,
             ...(AuthStore.csrf ? {csrf: AuthStore.csrf} : {})
-        }
+        },
+        withCredentials: true
     }).then(res => res).catch(reason => {
         const data = reason.response.data;
         (window as any).message.error(data.code + ' 错误：' + data.msg);
@@ -17,9 +19,11 @@ function Get(url: string, params: {}) {
 
 function Post(url: string, params: {}) {
     const AuthStore = useAuthData();
-    return axios.post(url, {
+    return axios.post(AppConfig.api.endpoint + url, {
         ...params,
         ...(AuthStore.csrf ? {csrf: AuthStore.csrf} : {})
+    }, {
+        withCredentials: true
     }).catch(reason => {
         const data = reason.response.data;
         (window as any).message.error(data.code + ' 错误：' + data.msg);
@@ -29,9 +33,11 @@ function Post(url: string, params: {}) {
 
 function Put(url: string, params: {}) {
     const AuthStore = useAuthData();
-    return axios.put(url, {
+    return axios.put(AppConfig.api.endpoint + url, {
         ...params,
         ...(AuthStore.csrf ? {csrf: AuthStore.csrf} : {})
+    }, {
+        withCredentials: true
     }).catch(reason => {
         const data = reason.response.data;
         (window as any).message.error(data.code + ' 错误：' + data.msg);
@@ -41,11 +47,12 @@ function Put(url: string, params: {}) {
 
 function Delete(url: string, params: {}) {
     const AuthStore = useAuthData();
-    return axios.delete(url, {
+    return axios.delete(AppConfig.api.endpoint + url, {
         params: {
             ...params,
             ...(AuthStore.csrf ? {csrf: AuthStore.csrf} : {})
-        }
+        },
+        withCredentials: true
     }).catch(reason => {
         const data = reason.response.data;
         (window as any).message.error(data.code + ' 错误：' + data.msg);
